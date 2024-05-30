@@ -23,7 +23,7 @@ NEW_INTERVAL=$((NEW_END_TIMESTAMP - NEW_START_TIMESTAMP))
 
 git filter-branch -f --env-filter '
     if [ $GIT_COMMITER_DATE -ge 1717038000 ] && [ $GIT_COMMITER_DATE -le 1717124399]; then
-        export GIT_COMMITER_DATE="2024-05-03T17:00:00"
-        export GIT_AUTHOR_DATE="2024-05-03T17:00:00"
+        export GIT_COMMITER_DATE="2024-05-03T10:00:00"
+        export GIT_AUTHOR_DATE="2024-05-03T10:00:00"
     fi
 ' --tag-name-filter cat -- --all
