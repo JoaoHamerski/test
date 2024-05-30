@@ -1,8 +1,28 @@
 #!/bin/bash
 
-for i in {1..20}
-do
-	touch text$i
-	git add .
-	git commit -m "test"
-done
+date_to_timestamp() {
+    local TIMESTAMP=$(date -d "$1" +%s)
+
+    echo $TIMESTAMP
+}
+
+TODAY=$(date +"%Y-%m-%d")
+
+START_DATE="${TODAY}T00:00:00"
+END_DATE="${TODAY}T23:59:59"
+
+NEW_START_DATE="${TODAY}T08:30:00"
+NEW_END_DATE="${TODAY}T17:30:00"
+
+START_TIMESTAMP=$(date_to_timestamp $START_DATE)
+END_TIMESTAMP=$(date_to_timestamp $END_DATE)
+NEW_START_TIMESTAMP=$(date_to_timestamp $NEW_START_DATE)
+NEW_END_TIMESTAMP=$(date_to_timestamp $NEW_END_DATE)
+
+NEW_INTERVAL=$((NEW_END_TIMESTAMP - NEW_START_TIMESTAMP))
+
+git filter-branch --env-filter '
+    if [ $GIT_COMMITER_DATE -ge $START_TIMESTAMP ] && [ $GIT_COMMITER_DATE -le $END_TIMESTAMP]; then
+        echo $GIT_COMMITER_DATE
+    fi
+' --tag-name-filter cat -- --all
