@@ -34,11 +34,9 @@ calculate_new_date() {
 git filter-branch --env-filter '
 START_TIMESTAMP=$(date -d "'$START_DATE'" +%s)
 END_TIMESTAMP=$(date -d "'$END_DATE'" +%s)
-if [ $GIT_COMMITTER_DATE -ge $START_TIMESTAMP ] && [ $GIT_COMMITTER_DATE -le $END_TIMESTAMP ]; then
-    new_date=$(calculate_new_date $(date -d @$GIT_COMMITTER_DATE +"%Y-%m-%dT%H:%M:%S"))
-    export GIT_COMMITTER_DATE="$new_date"
-    export GIT_AUTHOR_DATE="$new_date"
-fi
+new_date=$(calculate_new_date $(date -d @$GIT_COMMITTER_DATE +"%Y-%m-%dT%H:%M:%S"))
+export GIT_COMMITTER_DATE="$new_date"
+export GIT_AUTHOR_DATE="$new_date"
 ' --tag-name-filter cat -- --all
 
 # Remove o backup criado pelo filter-branch
